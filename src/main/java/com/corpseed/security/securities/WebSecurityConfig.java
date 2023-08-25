@@ -69,7 +69,11 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
               .requestMatchers("/api/test/**").permitAll()
               .requestMatchers("/api/auth/createNewUser").permitAll()
               .requestMatchers("/api/auth/signin").permitAll()
-
+              .requestMatchers("/swagger-ui/**",
+                      "/swagger-resources/*",
+                      "/v3/api-docs/**",
+                      "/dashboard-api-docs/**",
+                      "/dashboard-documentation/**").permitAll()
               .anyRequest().authenticated()
         );
     
