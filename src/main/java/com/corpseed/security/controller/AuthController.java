@@ -81,7 +81,7 @@ public class AuthController {
 //				roles));
 //	}
 	
-	@PostMapping("/signins")
+	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
 		User user=userRepository.findByEmail(loginRequest.getEmail());
 		Authentication authentication = authenticationManager.authenticate(
