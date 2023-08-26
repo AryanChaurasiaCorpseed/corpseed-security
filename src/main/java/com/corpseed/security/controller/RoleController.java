@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +37,7 @@ public class RoleController {
 	@GetMapping("/api/v1/getUserRole")
 	public 	User getUserRole(@RequestParam Long userId) {
 		Optional<User> optionalUser = userRepository.findById(userId);
-		User user = optionalUser.get();
-		
+		User user = optionalUser.get();	
 		return user;
 	}
 	
@@ -47,6 +47,11 @@ public class RoleController {
 		role.setName(name);
 		Role r = roleRepository.save(role);
 		return r;
+	}
+	@GetMapping("/api/v1/getRole")
+	public List<Role>getAllRole(){
+		List<Role> roles = roleRepository.findAll();
+		return roles;
 	}
 	
 
