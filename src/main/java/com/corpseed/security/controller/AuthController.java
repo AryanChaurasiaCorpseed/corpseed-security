@@ -61,11 +61,31 @@ public class AuthController {
 	@Autowired
 	private JwtUtils jwtUtils;
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
-
+//	@PostMapping("/signin")
+//	public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
+//		Authentication authentication = authenticationManager.authenticate(
+//				new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
+//
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//		String jwt = jwtUtils.generateJwtToken(authentication);
+//		System.out.println(jwt);
+//		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
+//		List<String> roles = userDetails.getAuthorities().stream()
+//				.map(item -> item.getAuthority())
+//				.collect(Collectors.toList());
+//
+//		return ResponseEntity.ok(new JwtResponse(jwt, 
+//				userDetails.getId(), 
+//				userDetails.getUsername(), 
+//				userDetails.getEmail(), 
+//				roles));
+//	}
+	
+	@PostMapping("/signins")
+	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
+		User user=userRepository.findByEmail(loginRequest.getEmail());
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
@@ -81,6 +101,7 @@ public class AuthController {
 				userDetails.getEmail(), 
 				roles));
 	}
+	
 	/*
 	 * By Aryan Chaurasia
 	 */
