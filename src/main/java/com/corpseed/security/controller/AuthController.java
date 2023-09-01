@@ -110,10 +110,13 @@ public class AuthController {
 	@PostMapping("/createNewUser")
 	public ResponseEntity<Object> registerUserV3(@RequestBody SignupRequest signUpRequest){
 		Map<String,Object> response = authService.registerUserV2(signUpRequest);
-		if (response.get("flag").equals("true"))	{	
+		
+		  System.out.println(response.get("flag").toString());
+
+		if (response.get("flag").toString().equals("true"))	{	
 			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
 		}else	{	
-			return ResponseHandler.generateResponse(HttpStatus.NO_CONTENT,false,"failed",response);
+			return ResponseHandler.generateResponse(HttpStatus.PARTIAL_CONTENT,false,"failed",response);
 		}
 	}
 

@@ -30,17 +30,17 @@ public class OpenAPIConfig {
     prodServer.setDescription("Server URL in Production environment");
 
     Contact contact = new Contact();
-    contact.setEmail("arysn.chaurasia@corpseed.com");
+    contact.setEmail("aryan.chaurasia@corpseed.com");
     contact.setName("Aryan");
     contact.setUrl("https://www.corpseed.com");
 
     License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
 
     Info info = new Info()
-        .title("Tutorial Management API")
-        .version("1.0")
+        .title("Corpseed Security")
+        .version("Aryan1.0")
         .contact(contact)
-        .description("This API exposes endpoints to manage tutorials.").termsOfService("https://www.corpseed.com/terms")
+        .description("This API exposes endpoints to manage security.").termsOfService("https://www.corpseed.com/terms")
         .license(mitLicense);
 
     return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
