@@ -3,7 +3,7 @@ package com.corpseed.security.payload.request;
 import java.util.Set;
 
 import lombok.Data;
-@Data
+//@Data
 public class SignupRequest {
 	
 	String username;
@@ -12,6 +12,7 @@ public class SignupRequest {
 	Set<String>role;
     private String mobile;
     private String otp;
+    String companyName;
 	public String getUsername() {
 		return username;
 	}
@@ -48,6 +49,13 @@ public class SignupRequest {
 	public void setOtp(String otp) {
 		this.otp = otp;
 	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	
 	
 	
 	
