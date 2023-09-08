@@ -1,8 +1,10 @@
 package com.corpseed.security.services;
 
+import org.springframework.stereotype.Service;
+
 import com.corpseed.security.models.OTP;
 import com.corpseed.security.payload.request.OtpResponse;
-
+@Service
 public interface OtpService {
 
 
