@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.corpseed.security.jwt.JwtUtils;
 import com.corpseed.security.models.ERole;
+import com.corpseed.security.models.OTP;
 import com.corpseed.security.models.Role;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.LoginRequest;
@@ -34,6 +35,7 @@ import com.corpseed.security.payload.response.JwtResponse;
 import com.corpseed.security.payload.response.MessageResponse;
 import com.corpseed.security.repository.RoleRepository;
 import com.corpseed.security.repository.UserRepository;
+import com.corpseed.security.serviceImpl.OtpRepository;
 import com.corpseed.security.services.AuthService;
 import com.corpseed.security.services.UserDetailsImpl;
 import com.corpseed.security.util.ResponseHandler;
@@ -51,6 +53,9 @@ public class AuthController {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private UserRepository userRepository;
+	
+    @Autowired
+    private OtpRepository otpRepository;
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -105,13 +110,21 @@ public class AuthController {
 	/*
 	 * By Aryan Chaurasia
 	 */
-
+    public OTP findOtpByMobileAndOtpCode(String mobile, String otp) {
+        return this.otpRepository.findByMobileContainingAndOtpCode(mobile,otp);
+    }
 
 	@PostMapping("/createNewUser")
 	public ResponseEntity<Object> registerUserV3(@RequestBody SignupRequest signUpRequest){
+		
+        OTP otp=findOtpByMobileAndOtpCode(signUpRequest.getMobile(),signUpRequest.getOtp());
+
+        if(otp==null) {
+            return ResponseHandler.generateResponse(HttpStatus.NOT_ACCEPTABLE,false,"Enter a valid OTP !!",null);
+        }
 		Map<String,Object> response = authService.registerUserV2(signUpRequest);
 		
-		  System.out.println(response.get("flag").toString());
+		  System.out.println("resssss=============================="+response.get("flag").toString());
 
 		if (response.get("flag").toString().equals("true"))	{	
 			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
