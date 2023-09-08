@@ -32,6 +32,9 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
   
+  String companyName;
+
+  
   private Boolean isDeleted;
 
   public User() {
@@ -91,6 +94,14 @@ public Boolean getIsDeleted() {
 
 public void setIsDeleted(Boolean isDeleted) {
 	this.isDeleted = isDeleted;
+}
+
+public String getCompanyName() {
+	return companyName;
+}
+
+public void setCompanyName(String companyName) {
+	this.companyName = companyName;
 }
 
 
