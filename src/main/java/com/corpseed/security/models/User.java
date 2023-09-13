@@ -33,6 +33,8 @@ public class User {
   private Set<Role> roles = new HashSet<>();
   
   String companyName;
+  
+  String mobile;
 
   
   private Boolean isDeleted;
@@ -103,6 +105,16 @@ public String getCompanyName() {
 public void setCompanyName(String companyName) {
 	this.companyName = companyName;
 }
+
+public String getMobile() {
+	return mobile;
+}
+
+public void setMobile(String mobile) {
+	this.mobile = mobile;
+}
+
+
 
 
   // getters and setters
