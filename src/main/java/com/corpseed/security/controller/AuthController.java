@@ -157,12 +157,12 @@ public class AuthController {
 	//	}
 	
 	@PutMapping("/updateUser")
-	public Boolean updateUser(Long userId,String password,String otpId,String mobile) {
+	public Boolean updateUser(Long userId,String password,String mobile) {
 		Boolean flag=false;
-        OTP otp=findOtpByMobileAndOtpCode(mobile,otpId);
-        if(otp==null) {
-            return false;// if flag equals false then we have to return by 
-        }
+//        OTP otp=findOtpByMobileAndOtpCode(mobile,otpId);
+//        if(otp==null) {
+//            return false;// if flag equals false then we have to return by 
+//        }
 		Optional<User> optionalUser = userRepository.findById(userId);
 		User user = optionalUser.get();
         user.setPassword(encoder.encode(password));
