@@ -72,9 +72,9 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
               .requestMatchers("/api/auth/createNewUser","/api/v1/createRole").permitAll()
               .requestMatchers("/api/auth/signin").permitAll()
               .requestMatchers("/api/auth/createNewUser").permitAll()
-              
+                  
               .requestMatchers("/api/auth/forgetOtp").permitAll()
-
+              .requestMatchers("/api/auth/isUserExistOrNot").permitAll()
               .requestMatchers("/swagger-ui/**",
                       "/swagger-resources/*",
                       "/v3/api-docs/**",

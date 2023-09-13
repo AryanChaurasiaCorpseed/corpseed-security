@@ -165,7 +165,7 @@ public class AuthController {
         }
 		Optional<User> optionalUser = userRepository.findById(userId);
 		User user = optionalUser.get();
-        user.setPassword(password);
+        user.setPassword(encoder.encode(password));
         userRepository.save(user);
         flag=true;
          
