@@ -63,7 +63,8 @@ public class OtpServiceImpl implements OtpService {
             flag=true;			
 		}
 		res.put("flag", flag);
-		res.put("userId", user.getId());
+		res.put("userId", user!=null?user.getId():null);
+		res.put("mobile", user!=null?user.getMobile():null);
 
 		return res;
 	}
