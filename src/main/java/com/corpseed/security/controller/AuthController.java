@@ -44,7 +44,7 @@ import com.corpseed.security.util.ResponseHandler;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/apis/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
 	@Autowired

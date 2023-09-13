@@ -2,11 +2,16 @@ package com.corpseed.security.serviceImpl;
 
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.corpseed.security.models.OTP;
+import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.OtpResponse;
+import com.corpseed.security.repository.UserRepository;
 import com.corpseed.security.services.OtpService;
 import com.corpseed.security.util.CommonUtil;
 
@@ -16,6 +21,8 @@ public class OtpServiceImpl implements OtpService {
     @Autowired
     private OtpRepository otpRepository;
 
+	@Autowired
+	private UserRepository userRepository;
 
     @Override
     public OtpResponse generateOtp(String mobile, String name,String password) {
@@ -46,4 +53,18 @@ public class OtpServiceImpl implements OtpService {
     public OTP findOtpByMobileAndOtpCode(String mobile, String otp) {
         return this.otpRepository.findByMobileContainingAndOtpCode(mobile,otp);
     }
+
+	@Override
+	public Map<String,Object> isUserExistOrNot(String email) {
+		Map<String,Object>res = new HashMap<>();
+		boolean flag=false;
+		User user = userRepository.findByEmail(email);
+		if(user!=null) {
+            flag=true;			
+		}
+		res.put("flag", flag);
+		res.put("userId", user.getId());
+
+		return res;
+	}
 }
