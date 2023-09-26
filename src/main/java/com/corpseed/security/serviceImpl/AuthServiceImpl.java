@@ -1,7 +1,9 @@
 package com.corpseed.security.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,9 +50,11 @@ public class AuthServiceImpl implements AuthService {
 				  user.setMobile(signUpRequest.getMobile());
 				  user.setCompanyName(signUpRequest.getCompanyName()!=null?signUpRequest.getCompanyName():"NA");
 				  user.setPassword(encoder.encode(signUpRequest.getPassword()));
-			      Set<String> strRoles = signUpRequest.getRole();
-			      Set<Role> roles = new HashSet<>();
-			      user.setRoles(roles);
+			      List<String> strRoles = signUpRequest.getRole();
+			      
+			      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
+//			      List<Role> roles = new ArrayList<>();
+			      user.setRoles(rolesList);
 			      User u = userRepository.save(user);
 			      map.put("name", u.getUsername());
 			      map.put("email", u.getEmail());

@@ -1,6 +1,8 @@
 package com.corpseed.security.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -30,7 +32,7 @@ public class User {
   @JoinTable(  name = "user_roles", 
         joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+  private List<Role> roles = new ArrayList<>();
   
   String companyName;
   
@@ -80,13 +82,13 @@ public void setPassword(String password) {
 	this.password = password;
 }
 
-public Set<Role> getRoles() {
+public List<Role> getRoles() {
 	return roles;
 }
 
 
 
-public void setRoles(Set<Role> roles) {
+public void setRoles(List<Role> roles) {
 	this.roles = roles;
 }
 

@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,6 +66,11 @@ public class AuthController {
 
 	@Autowired
 	private JwtUtils jwtUtils;
+	
+	@GetMapping("/testm")
+	public String  testMicroservices() {
+		return "this is a person";
+	}
 
 //	@PostMapping("/signin")
 //	public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
@@ -206,8 +212,9 @@ public class AuthController {
 				signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()));
 
-		Set<String> strRoles = signUpRequest.getRole();
+		List<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
+	      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -236,7 +243,7 @@ public class AuthController {
 			});
 		}
 
-		user.setRoles(roles);
+		user.setRoles(rolesList);
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
