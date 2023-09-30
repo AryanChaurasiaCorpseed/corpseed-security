@@ -10,7 +10,7 @@ public class SignupRequest {
 	String username;
 	String email;
 	String password;
-	List<String>role;
+//	List<String>role;
     private String mobile;
     private String otp;
     String companyName;
@@ -32,12 +32,11 @@ public class SignupRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public List<String> getRole() {
-		return role;
-	}
-	public void setRole(List<String> role) {
-		this.role = role;
-	}
+
+	/*
+	 * public List<String> getRole() { return role; } public void
+	 * setRole(List<String> role) { this.role = role; }
+	 */
 	public String getMobile() {
 		return mobile;
 	}

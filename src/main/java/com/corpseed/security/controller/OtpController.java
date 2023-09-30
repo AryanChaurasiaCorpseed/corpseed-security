@@ -23,7 +23,7 @@ import com.corpseed.security.util.ResponseHandler;
 
 @RestController
 //@Api("Handle otp related actions")
-@RequestMapping("/api/auth")
+@RequestMapping("/securityService/api/auth")
 public class OtpController {
 
     @Autowired

@@ -65,16 +65,16 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
-          auth.requestMatchers("/api/auth/**").permitAll()
-              .requestMatchers("/api/test/**").permitAll()
-              .requestMatchers("/api/auth/createNewUser").permitAll()
-              .requestMatchers("/api/**").permitAll()
-              .requestMatchers("/api/auth/createNewUser","/api/v1/createRole").permitAll()
-              .requestMatchers("/api/auth/signin").permitAll()
-              .requestMatchers("/api/auth/createNewUser").permitAll()
+          auth.requestMatchers("/securityService/api/auth/**").permitAll()
+              .requestMatchers("/securityService/api/test/**").permitAll()
+              .requestMatchers("/securityService/api/auth/createNewUser").permitAll()
+              .requestMatchers("/securityService/api/**").permitAll()
+              .requestMatchers("/securityService/api/auth/createNewUser","/securityService/api/v1/createRole").permitAll()
+              .requestMatchers("/securityService/api/auth/signin").permitAll()
+              .requestMatchers("/securityService/api/auth/createNewUser").permitAll()
                   
-              .requestMatchers("/api/auth/forgetOtp").permitAll()
-              .requestMatchers("/api/auth/isUserExistOrNot").permitAll()
+              .requestMatchers("/securityService/api/auth/forgetOtp").permitAll()
+              .requestMatchers("/securityService/api/auth/isUserExistOrNot").permitAll()
               .requestMatchers("/swagger-ui/**",
                       "/swagger-resources/*",
                       "/v3/api-docs/**",
