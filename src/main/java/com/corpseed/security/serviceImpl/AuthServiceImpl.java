@@ -1,12 +1,14 @@
 package com.corpseed.security.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,11 +52,12 @@ public class AuthServiceImpl implements AuthService {
 				  user.setMobile(signUpRequest.getMobile());
 				  user.setCompanyName(signUpRequest.getCompanyName()!=null?signUpRequest.getCompanyName():"NA");
 				  user.setPassword(encoder.encode(signUpRequest.getPassword()));
-			      List<String> strRoles = signUpRequest.getRole();
-			      
+			      List<String> strRoles =  Arrays.asList("Admin","User");			      
 			      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 //			      List<Role> roles = new ArrayList<>();
-			      user.setRoles(rolesList);
+			      if(rolesList!=null && rolesList.size()>0) {
+				      user.setRoles(rolesList);
+			      }
 			      User u = userRepository.save(user);
 			      map.put("name", u.getUsername());
 			      map.put("email", u.getEmail());

@@ -18,7 +18,7 @@ import com.corpseed.security.repository.UserRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/securityService/api/v1")
 public class RoleController {
 	
 	@Autowired

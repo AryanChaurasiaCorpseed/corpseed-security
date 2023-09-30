@@ -1,5 +1,6 @@
 package com.corpseed.security.controller;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.corpseed.security.jwt.JwtUtils;
@@ -43,9 +45,9 @@ import com.corpseed.security.util.ResponseHandler;
 
 
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/securityService/api/auth")
 public class AuthController {
 
 	@Autowired
@@ -92,11 +94,13 @@ public class AuthController {
 //				roles));
 //	}
 	
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
-		User user=userRepository.findByEmail(loginRequest.getEmail());
+	@GetMapping("/signin")
+//	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
+
+		User user=userRepository.findByEmail(email);
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(user.getUsername(), password));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
@@ -212,7 +216,7 @@ public class AuthController {
 				signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()));
 
-		List<String> strRoles = signUpRequest.getRole();
+	      List<String> strRoles =  Arrays.asList("Admin","User");			      
 		Set<Role> roles = new HashSet<>();
 	      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 
