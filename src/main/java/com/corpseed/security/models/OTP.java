@@ -51,6 +51,79 @@ public class OTP {
     @Column(name = "expired_at")
     private Date expiredAt;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getOtpCode() {
+		return otpCode;
+	}
+
+	public void setOtpCode(String otpCode) {
+		this.otpCode = otpCode;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
+	}
+
+	public boolean isUsed() {
+		return isUsed;
+	}
+
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
+
+	public Date getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
+	}
+
+	public Date getExpiredAt() {
+		return expiredAt;
+	}
+
+	public void setExpiredAt(Date expiredAt) {
+		this.expiredAt = expiredAt;
+	}
+
+    
 
 
 }
