@@ -45,7 +45,7 @@ import com.corpseed.security.util.ResponseHandler;
 
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/securityService/api/auth")
 public class AuthController {
@@ -70,7 +70,7 @@ public class AuthController {
 	private JwtUtils jwtUtils;
 	
 	@GetMapping("/testm")
-	public String  testMicroservices() {
+	public String  testMicroservices(@RequestParam("token") String token) {
 		return "this is a person";
 	}
 

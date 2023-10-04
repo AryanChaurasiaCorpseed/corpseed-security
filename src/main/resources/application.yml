@@ -1,6 +1,23 @@
-corpseed-security:
-      sensitiveHeaders: Cookie,Set-Cookie
-      routes:
-          LEAD-SERVICE:
-                path: /**
-                url: http://localhost:9001̥
+#corpseed-security:
+#      sensitiveHeaders: Cookie,Set-Cookie
+#      routes:
+#          LEAD-SERVICE:
+#                path: /**
+#                url: http://localhost:9001̥
+#                
+#                
+                
+
+                
+                
+management:
+    endpoints:
+        web:
+            exposure:
+                include: info
+    info:
+        env:
+            enabled: true
+            
+            
+            
