@@ -142,6 +142,20 @@ public class AuthController {
 			return ResponseHandler.generateResponse(HttpStatus.PARTIAL_CONTENT,false,"failed",response);
 		}
 	}
+	
+	@PostMapping("/createNewUserByEmail")
+	public ResponseEntity<Object> createNewUserByEmail(@RequestParam String email,@RequestParam String role){
+
+		Map<String,Object> response = authService.createNewUserByEmail(email,role);
+		
+		  System.out.println("resssss=============================="+response.get("flag").toString());
+
+		if (response.get("flag").toString().equals("true"))	{	
+			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
+		}else	{	
+			return ResponseHandler.generateResponse(HttpStatus.PARTIAL_CONTENT,false,"failed",response);
+		}
+	}
 
 
 	//	@PostMapping("/createNewUser")

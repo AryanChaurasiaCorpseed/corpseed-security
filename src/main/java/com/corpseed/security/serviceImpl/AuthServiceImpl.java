@@ -72,4 +72,22 @@ public class AuthServiceImpl implements AuthService {
 			 return map;
 
 		  }
+
+	@Override
+	public Map<String, Object> createNewUserByEmail(String email, String role) {
+		// TODO Auto-generated method stub
+		Map<String,Object>res = new HashMap<String,Object>();
+		User user = new User();
+		user.setEmail(email);
+		List<String> strRoles =  new ArrayList<>();		      
+		strRoles.add(role);
+	     List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
+		user.setRoles(rolesList);
+        res.put("userId", user.getId());
+        res.put("name", user.getUsername());
+        res.put("role", user.getRoles());
+        res.put("email", user.getEmail());
+
+		return res;
+	}
 }
