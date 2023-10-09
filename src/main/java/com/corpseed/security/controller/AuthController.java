@@ -144,9 +144,9 @@ public class AuthController {
 	}
 	
 	@PostMapping("/createNewUserByEmail")
-	public ResponseEntity<Object> createNewUserByEmail(@RequestParam String email,@RequestParam String role){
+	public ResponseEntity<Object> createNewUserByEmail(@RequestParam String email,@RequestParam String role,@RequestParam String designation,@RequestParam String userName){
 
-		Map<String,Object> response = authService.createNewUserByEmail(email,role);
+		Map<String,Object> response = authService.createNewUserByEmail(userName,email,role,designation);
 		
 		  System.out.println("resssss=============================="+response.get("flag").toString());
 
