@@ -59,7 +59,9 @@ public class AuthServiceImpl implements AuthService {
 				      user.setRoles(rolesList);
 			      }
 			      User u = userRepository.save(user);
+			      map.put("id", u.getId());
 			      map.put("name", u.getUsername());
+			      map.put("designation", u.getDesignation());
 			      map.put("email", u.getEmail());
 			      map.put("roles", u.getRoles());
 			      map.put("flag", "true");
