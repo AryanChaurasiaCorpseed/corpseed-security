@@ -94,13 +94,13 @@ public class AuthController {
 //				roles));
 //	}
 	
-	@GetMapping("/signin")
-//	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
-	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
+//	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
 
-		User user=userRepository.findByEmail(email);
+		User user=userRepository.findByEmail(loginRequest.getEmail());
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(user.getUsername(), password));
+				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
