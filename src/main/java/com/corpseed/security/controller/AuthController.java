@@ -33,6 +33,7 @@ import com.corpseed.security.models.OTP;
 import com.corpseed.security.models.Role;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.LoginRequest;
+import com.corpseed.security.payload.request.NewSignupRequest;
 import com.corpseed.security.payload.request.SignupRequest;
 import com.corpseed.security.payload.response.JwtResponse;
 import com.corpseed.security.payload.response.MessageResponse;
@@ -144,9 +145,9 @@ public class AuthController {
 	}
 	
 	@PostMapping("/createNewUserByEmail")
-	public ResponseEntity<Object> createNewUserByEmail(@RequestParam String email,@RequestParam String role,@RequestParam String designation,@RequestParam String userName){
+	public ResponseEntity<Object> createNewUserByEmail(@RequestBody NewSignupRequest newSignupRequest){
 
-		Map<String,Object> response = authService.createNewUserByEmail(userName,email,role,designation);
+		Map<String,Object> response = authService.createNewUserByEmail(newSignupRequest.getUserName(),newSignupRequest.getEmail(),newSignupRequest.getRole(),newSignupRequest.getDesignation());
 		
 		if (response.get("flag").toString().equals("true"))	{	
 			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
