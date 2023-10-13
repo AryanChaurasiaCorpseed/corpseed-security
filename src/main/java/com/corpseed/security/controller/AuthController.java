@@ -1,7 +1,12 @@
 package com.corpseed.security.controller;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.*;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -68,8 +73,39 @@ public class AuthController {
 	private JwtUtils jwtUtils;
 	
 	@GetMapping("/test")
-	public String  testMicroservices() {
-		return "this is a person";
+	public List<String>  testMicroservices() {
+        try {
+//          ipAddressInfoList.add(localhost.getHostAddress());
+//          ipAddressInfoList.add(localhost.getHostName());
+//          ipAddressInfoList.add(Arrays.toString(localhost.getAddress()));
+//          ipAddressInfoList.add(localhost.getCanonicalHostName());
+
+          InetAddress localhost = InetAddress.getLocalHost();
+          String systemipaddress = localhost.getHostAddress();
+          String systemhostname = localhost.getHostName();
+          String systemaddress = Arrays.toString(localhost.getAddress());
+//          String systemipaddress3 = localhost.getCanonicalHostName();
+
+
+          List<String>  ipaddressdetails= new ArrayList<>();
+          ipaddressdetails.add(systemhostname);
+          ipaddressdetails.add(systemaddress);
+          ipaddressdetails.add(systemipaddress);
+
+          System.out.println(systemhostname+systemaddress);
+
+
+          System.out.println("System IP Address: " + systemipaddress + "\n");
+          return ipaddressdetails; // return the IP address as a String
+      } catch (UnknownHostException e) {
+          System.err.println("Error resolving host: " + e.getMessage());
+          return new ArrayList<>(); // or any other default value
+      } catch (Exception e) {
+          e.printStackTrace();
+          return new ArrayList<>(); // handle other exceptions appropriately in your application
+      }
+//		return "this is a person";
+		
 	}
 
 //	@PostMapping("/signin")
