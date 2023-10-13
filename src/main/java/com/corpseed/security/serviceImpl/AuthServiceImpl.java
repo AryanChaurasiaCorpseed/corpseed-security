@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
 			      map.put("name", u.getUsername());
 			      map.put("designation", u.getDesignation());
 			      map.put("email", u.getEmail());
-			      map.put("roles", u.getRoles());
+			      map.put("roles", u.getRoles().stream().map(i->i.getName()).collect(Collectors.toList()));
 			      map.put("flag", "true");
                   map.put("message", "successfully registered");
 			  }else {
