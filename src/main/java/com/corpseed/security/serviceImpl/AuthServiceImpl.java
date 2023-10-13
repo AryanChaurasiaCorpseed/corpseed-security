@@ -96,6 +96,7 @@ public class AuthServiceImpl implements AuthService {
         res.put("userId", user.getId());
         res.put("name", user.getUsername());
         res.put("role", user.getRoles());
+        res.put("designation", user.getDesignation());
         res.put("email", user.getEmail());
 
 		return res;
