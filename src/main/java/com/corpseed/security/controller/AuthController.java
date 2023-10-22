@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.corpseed.security.jwt.JwtUtils;
@@ -36,6 +37,7 @@ import com.corpseed.security.models.OTP;
 import com.corpseed.security.models.Role;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.LoginRequest;
+import com.corpseed.security.payload.request.NewSignupRequest;
 import com.corpseed.security.payload.request.SignupRequest;
 import com.corpseed.security.payload.response.JwtResponse;
 import com.corpseed.security.payload.response.MessageResponse;
@@ -50,7 +52,7 @@ import com.corpseed.security.util.ResponseHandler;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/securityService/api/auth")
 public class AuthController {
 
 	@Autowired
@@ -105,7 +107,10 @@ public class AuthController {
           return new ArrayList<>(); // handle other exceptions appropriately in your application
       }
 //		return "this is a person";
-		
+	}
+	@GetMapping("/testm")
+	public String  testMicroservices(@RequestParam("token") String token) {
+		return "this is a person";
 	}
 
 //	@PostMapping("/signin")
@@ -130,6 +135,8 @@ public class AuthController {
 	
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
+//	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
+
 		User user=userRepository.findByEmail(loginRequest.getEmail());
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
@@ -168,6 +175,18 @@ public class AuthController {
 		
 		  System.out.println("resssss=============================="+response.get("flag").toString());
 
+		if (response.get("flag").toString().equals("true"))	{	
+			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
+		}else	{	
+			return ResponseHandler.generateResponse(HttpStatus.PARTIAL_CONTENT,false,"failed",response);
+		}
+	}
+	
+	@PostMapping("/createNewUserByEmail")
+	public ResponseEntity<Object> createNewUserByEmail(@RequestBody NewSignupRequest newSignupRequest){
+
+		Map<String,Object> response = authService.createNewUserByEmail(newSignupRequest.getUserName(),newSignupRequest.getEmail(),newSignupRequest.getRole(),newSignupRequest.getDesignation());
+		
 		if (response.get("flag").toString().equals("true"))	{	
 			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
 		}else	{	
@@ -248,8 +267,9 @@ public class AuthController {
 				signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()));
 
-		Set<String> strRoles = signUpRequest.getRole();
+	      List<String> strRoles =  Arrays.asList("Admin","User");			      
 		Set<Role> roles = new HashSet<>();
+	      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -278,7 +298,7 @@ public class AuthController {
 			});
 		}
 
-		user.setRoles(roles);
+		user.setRoles(rolesList);
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

@@ -1,10 +1,15 @@
 package com.corpseed.security.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,13 +53,18 @@ public class AuthServiceImpl implements AuthService {
 				  user.setMobile(signUpRequest.getMobile());
 				  user.setCompanyName(signUpRequest.getCompanyName()!=null?signUpRequest.getCompanyName():"NA");
 				  user.setPassword(encoder.encode(signUpRequest.getPassword()));
-			      Set<String> strRoles = signUpRequest.getRole();
-			      Set<Role> roles = new HashSet<>();
-			      user.setRoles(roles);
+			      List<String> strRoles =  Arrays.asList("Admin","User");			      
+			      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
+//			      List<Role> roles = new ArrayList<>();
+			      if(rolesList!=null && rolesList.size()>0) {
+				      user.setRoles(rolesList);
+			      }
 			      User u = userRepository.save(user);
+			      map.put("id", u.getId());
 			      map.put("name", u.getUsername());
+			      map.put("designation", u.getDesignation());
 			      map.put("email", u.getEmail());
-			      map.put("roles", u.getRoles());
+			      map.put("roles", u.getRoles().stream().map(i->i.getName()).collect(Collectors.toList()));
 			      map.put("flag", "true");
                   map.put("message", "successfully registered");
 			  }else {
@@ -65,4 +75,31 @@ public class AuthServiceImpl implements AuthService {
 			 return map;
 
 		  }
+
+	@Override
+	public Map<String, Object> createNewUserByEmail(String userName,String email, String role,String designation) {
+		// TODO Auto-generated method stub
+		Map<String,Object>res = new HashMap<String,Object>();
+		User user = new User();
+		user.setUsername(userName);
+		user.setEmail(email);
+		List<String> strRoles =  new ArrayList<>();		      
+		strRoles.add(role);
+	     List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
+		user.setRoles(rolesList);
+		user.setDesignation(designation);
+		User u=userRepository.save(user);
+        if(u!=null) {
+            res.put("flag", true);
+        }else {
+            res.put("flag", false);
+        }
+        res.put("userId", user.getId());
+        res.put("name", user.getUsername());
+        res.put("role", user.getRoles());
+        res.put("designation", user.getDesignation());
+        res.put("email", user.getEmail());
+
+		return res;
+	}
 }

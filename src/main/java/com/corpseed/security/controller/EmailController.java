@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.corpseed.security.serviceImpl.MailSenderServiceImpl;
 
 @RestController
-@RequestMapping("/api/email")
+@RequestMapping("/securityService/api/email")
 public class EmailController {
 
     @Autowired
