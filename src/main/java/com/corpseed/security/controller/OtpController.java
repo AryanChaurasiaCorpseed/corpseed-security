@@ -16,6 +16,7 @@ import com.corpseed.security.models.OTP;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.OtpRequest;
 import com.corpseed.security.payload.request.OtpResponse;
+import com.corpseed.security.payload.request.UpdateOtpResponse;
 import com.corpseed.security.repository.UserRepository;
 import com.corpseed.security.serviceImpl.OtpRepository;
 import com.corpseed.security.services.OtpService;
@@ -60,9 +61,9 @@ public class OtpController {
  		}   
  	}
     @PostMapping("/forgetOtp")
-    public OtpResponse forgetOtp(@RequestParam String email){	 	
+    public UpdateOtpResponse forgetOtp(@RequestParam String email){	 	
     	User user = userRepository.findByEmail(email);
-	    return this.otpService.generateOtp(user.getMobile(),user.getUsername(),user.getPassword());
+	    return this.otpService.forgetOtp(user.getMobile(),user.getUsername(),user.getPassword(),email);
     }
 }
 
