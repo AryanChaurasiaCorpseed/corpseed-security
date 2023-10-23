@@ -180,17 +180,22 @@ public class AuthController {
 	//	}
 	
 	@PutMapping("/updateUser")
-	public Boolean updateUser(Long userId,String password,String mobile) {
+	public Boolean updateUser(@RequestParam String email,@RequestParam String password,@RequestParam String otp) {
 		Boolean flag=false;
-//        OTP otp=findOtpByMobileAndOtpCode(mobile,otpId);
-//        if(otp==null) {
-//            return false;// if flag equals false then we have to return by 
-//        }
-		Optional<User> optionalUser = userRepository.findById(userId);
-		User user = optionalUser.get();
-        user.setPassword(encoder.encode(password));
-        userRepository.save(user);
-        flag=true;
+
+//		Optional<User> optionalUser = userRepository.findById(userId);
+		User user =userRepository.findByEmail(email);
+        OTP o=findOtpByMobileAndOtpCode(user.getMobile(),otp);
+
+        if(o==null) {
+              ResponseHandler.generateResponse(HttpStatus.NOT_ACCEPTABLE,false,"Enter a valid OTP !!",null);
+              flag=false;
+        }else {
+            user.setPassword(encoder.encode(password));
+            userRepository.save(user);
+            flag=true;
+        }
+
          
 		return flag;
 		
