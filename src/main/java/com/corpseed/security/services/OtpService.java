@@ -17,7 +17,6 @@ public interface OtpService {
 
     Map<String,Object>  isUserExistOrNot(String email);
     
-
 	UpdateOtpResponse forgetOtp(String mobile, String username, String password, String email);
 
 }
