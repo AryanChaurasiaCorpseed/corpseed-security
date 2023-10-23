@@ -21,15 +21,15 @@ public class CommonUtil {
         return false;
     }
 
-    public Date getDate(){return new Date();}
+    public static Date getDate(){return new Date();}
 
-    public LocalTime getCurrentDateAndTime(){
+    public static LocalTime getCurrentDateAndTime(){
         LocalDateTime localDateTime = LocalDateTime.now();
         LocalTime localTime = localDateTime.toLocalTime();
         return localTime;
     }
 
-    public String generateOTP(int length) {
+    public static String generateOTP(int length) {
         String numbers = "1234567890";
         Random random = new Random();
         StringBuffer otp = new StringBuffer(length);
@@ -40,7 +40,7 @@ public class CommonUtil {
         return otp.toString();
     }
 
-    public Date getExpiryDateTime() {
+    public static Date getExpiryDateTime() {
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.MINUTE,10);

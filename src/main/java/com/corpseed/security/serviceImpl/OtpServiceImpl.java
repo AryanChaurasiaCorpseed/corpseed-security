@@ -28,12 +28,14 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public OtpResponse generateOtp(String mobile, String name,String password) {
         String otpCode = CommonUtil.generateOTP(6);
-
-        OTP otp = this.otpRepository.findByMobileContaining
-                (mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
-                        : mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
-                .otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
-                .expiredAt(CommonUtil.getExpiryDateTime()).build());
+        
+        OTP otp = new OTP();
+//
+//        OTP otp = this.otpRepository.findByMobileContaining
+//                (mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
+//                        : mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
+//                .otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+//                .expiredAt(CommonUtil.getExpiryDateTime()).build());
         System.out.println("otp====="+otp);
 
         if(otp.getId()!=null&&otp.getId()>0){
@@ -46,7 +48,8 @@ public class OtpServiceImpl implements OtpService {
 
         OTP save = this.otpRepository.save(otp);
         if(save!=null)
-            return OtpResponse.builder().mobile(mobile).otp(otpCode).build();
+        	return null;
+//            return OtpResponse.builder().mobile(mobile).otp(otpCode).build();
         else return null;
     }
 
