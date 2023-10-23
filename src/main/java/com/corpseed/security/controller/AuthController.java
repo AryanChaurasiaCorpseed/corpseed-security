@@ -35,6 +35,7 @@ import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.LoginRequest;
 import com.corpseed.security.payload.request.NewSignupRequest;
 import com.corpseed.security.payload.request.SignupRequest;
+import com.corpseed.security.payload.request.UpdatePassword;
 import com.corpseed.security.payload.response.JwtResponse;
 import com.corpseed.security.payload.response.MessageResponse;
 import com.corpseed.security.repository.RoleRepository;
@@ -180,18 +181,18 @@ public class AuthController {
 	//	}
 	
 	@PutMapping("/updateUser")
-	public Boolean updateUser(@RequestParam String email,@RequestParam String password,@RequestParam String otp) {
+	public Boolean updateUser(@RequestBody UpdatePassword updatePassword) {
 		Boolean flag=false;
 
 //		Optional<User> optionalUser = userRepository.findById(userId);
-		User user =userRepository.findByEmail(email);
-        OTP o=findOtpByMobileAndOtpCode(user.getMobile(),otp);
+		User user =userRepository.findByEmail(updatePassword.getEmail());
+        OTP o=findOtpByMobileAndOtpCode(user.getMobile(),updatePassword.getOtp());
 
         if(o==null) {
               ResponseHandler.generateResponse(HttpStatus.NOT_ACCEPTABLE,false,"Enter a valid OTP !!",null);
               flag=false;
         }else {
-            user.setPassword(encoder.encode(password));
+            user.setPassword(encoder.encode(updatePassword.getPassword()));
             userRepository.save(user);
             flag=true;
         }
