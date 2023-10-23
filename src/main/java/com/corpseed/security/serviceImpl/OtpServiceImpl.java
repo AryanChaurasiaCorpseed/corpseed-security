@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.corpseed.security.models.OTP;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.OtpResponse;
+import com.corpseed.security.payload.request.UpdateOtpResponse;
 import com.corpseed.security.repository.UserRepository;
 import com.corpseed.security.services.OtpService;
 import com.corpseed.security.util.CommonUtil;
@@ -67,5 +68,32 @@ public class OtpServiceImpl implements OtpService {
 		res.put("mobile", user!=null?user.getMobile():null);
 
 		return res;
+	}
+	
+
+
+	@Override
+	public UpdateOtpResponse forgetOtp(String mobile, String name, String password, String email) {
+        String otpCode = CommonUtil.generateOTP(6);
+
+        OTP otp = this.otpRepository.findByMobileContaining
+                (mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
+                        : mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
+                .otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+                .expiredAt(CommonUtil.getExpiryDateTime()).build());
+        System.out.println("otp====="+otp);
+
+        if(otp.getId()!=null&&otp.getId()>0){
+            otp.setCount(otp.getCount()+1);
+            otp.setOtpCode(otpCode);
+            otp.setName(name);
+            otp.setPassword(password);
+            otp.setExpiredAt(CommonUtil.getExpiryDateTime());
+        };
+
+        OTP save = this.otpRepository.save(otp);
+        if(save!=null)
+            return UpdateOtpResponse.builder().mobile(mobile).otp(otpCode).email(email).build();
+        else return null;
 	}
 }
