@@ -19,7 +19,7 @@ public class EmailController {
     public String sendEmail(String[] ccPersons, @RequestParam String[] emailTo)  {
 //        String emailTo = "kaushlendra.pratap@corpseed.com";
 //        String[] ccPersons = {"kaushlendra.pratap@corpseed.com", "rahul.jain@corpseed.com"};
-        String[] bccPersons = {"kaushlendra.pratap@corpseed.com", "rahul.jain@corpseed.com"};
+        String[] bccPersons = { "rahul.jain@corpseed.com"};
 
         mailSendSerivce.sendEmail(emailTo, ccPersons, bccPersons);
 

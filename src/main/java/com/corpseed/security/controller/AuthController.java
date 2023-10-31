@@ -174,8 +174,6 @@ public class AuthController {
         }
 		Map<String,Object> response = authService.registerUserV2(signUpRequest);
 		
-		  System.out.println("resssss=============================="+response.get("flag").toString());
-
 		if (response.get("flag").toString().equals("true"))	{	
 			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
 		}else	{	
