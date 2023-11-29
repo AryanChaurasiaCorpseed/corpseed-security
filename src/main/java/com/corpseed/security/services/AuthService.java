@@ -11,4 +11,6 @@ import com.corpseed.security.payload.request.SignupRequest;
 public interface AuthService {
 
 	 public Map<String,Object> registerUserV2(SignupRequest signUpRequest);
+
+	public Map<String, Object> createNewUserByEmail(String userName,String email, String role,String designation);
 }

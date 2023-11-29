@@ -1,7 +1,12 @@
 package com.corpseed.security.controller;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.*;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -18,22 +23,28 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.corpseed.security.jwt.JwtUtils;
 import com.corpseed.security.models.ERole;
+import com.corpseed.security.models.OTP;
 import com.corpseed.security.models.Role;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.LoginRequest;
+import com.corpseed.security.payload.request.NewSignupRequest;
 import com.corpseed.security.payload.request.SignupRequest;
+import com.corpseed.security.payload.request.UpdatePassword;
 import com.corpseed.security.payload.response.JwtResponse;
 import com.corpseed.security.payload.response.MessageResponse;
 import com.corpseed.security.repository.RoleRepository;
 import com.corpseed.security.repository.UserRepository;
+import com.corpseed.security.serviceImpl.OtpRepository;
 import com.corpseed.security.services.AuthService;
 import com.corpseed.security.services.UserDetailsImpl;
 import com.corpseed.security.util.ResponseHandler;
@@ -42,7 +53,7 @@ import com.corpseed.security.util.ResponseHandler;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/apis/auth")
+@RequestMapping("/securityService/api/auth")
 public class AuthController {
 
 	@Autowired
@@ -51,6 +62,9 @@ public class AuthController {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private UserRepository userRepository;
+	
+    @Autowired
+    private OtpRepository otpRepository;
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -60,6 +74,45 @@ public class AuthController {
 
 	@Autowired
 	private JwtUtils jwtUtils;
+	
+	@GetMapping("/test")
+	public List<String>  testMicroservices() {
+        try {
+//          ipAddressInfoList.add(localhost.getHostAddress());
+//          ipAddressInfoList.add(localhost.getHostName());
+//          ipAddressInfoList.add(Arrays.toString(localhost.getAddress()));
+//          ipAddressInfoList.add(localhost.getCanonicalHostName());
+
+          InetAddress localhost = InetAddress.getLocalHost();
+          String systemipaddress = localhost.getHostAddress();
+          String systemhostname = localhost.getHostName();
+          String systemaddress = Arrays.toString(localhost.getAddress());
+//          String systemipaddress3 = localhost.getCanonicalHostName();
+
+
+          List<String>  ipaddressdetails= new ArrayList<>();
+          ipaddressdetails.add(systemhostname);
+          ipaddressdetails.add(systemaddress);
+          ipaddressdetails.add(systemipaddress);
+
+          System.out.println(systemhostname+systemaddress);
+
+
+          System.out.println("System IP Address: " + systemipaddress + "\n");
+          return ipaddressdetails; // return the IP address as a String
+      } catch (UnknownHostException e) {
+          System.err.println("Error resolving host: " + e.getMessage());
+          return new ArrayList<>(); // or any other default value
+      } catch (Exception e) {
+          e.printStackTrace();
+          return new ArrayList<>(); // handle other exceptions appropriately in your application
+      }
+//		return "this is a person";
+	}
+	@GetMapping("/testm")
+	public String  testMicroservices(@RequestParam("token") String token) {
+		return "this is a person";
+	}
 
 //	@PostMapping("/signin")
 //	public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
@@ -83,6 +136,8 @@ public class AuthController {
 	
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
+//	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
+
 		User user=userRepository.findByEmail(loginRequest.getEmail());
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
@@ -105,14 +160,32 @@ public class AuthController {
 	/*
 	 * By Aryan Chaurasia
 	 */
-
+    public OTP findOtpByMobileAndOtpCode(String mobile, String otp) {
+        return this.otpRepository.findByMobileContainingAndOtpCode(mobile,otp);
+    }
 
 	@PostMapping("/createNewUser")
 	public ResponseEntity<Object> registerUserV3(@RequestBody SignupRequest signUpRequest){
+		
+        OTP otp=findOtpByMobileAndOtpCode(signUpRequest.getMobile(),signUpRequest.getOtp());
+
+        if(otp==null) {
+            return ResponseHandler.generateResponse(HttpStatus.NOT_ACCEPTABLE,false,"Enter a valid OTP !!",null);
+        }
 		Map<String,Object> response = authService.registerUserV2(signUpRequest);
 		
-		  System.out.println(response.get("flag").toString());
+		if (response.get("flag").toString().equals("true"))	{	
+			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
+		}else	{	
+			return ResponseHandler.generateResponse(HttpStatus.PARTIAL_CONTENT,false,"failed",response);
+		}
+	}
+	
+	@PostMapping("/createNewUserByEmail")
+	public ResponseEntity<Object> createNewUserByEmail(@RequestBody NewSignupRequest newSignupRequest){
 
+		Map<String,Object> response = authService.createNewUserByEmail(newSignupRequest.getUserName(),newSignupRequest.getEmail(),newSignupRequest.getRole(),newSignupRequest.getDesignation());
+		
 		if (response.get("flag").toString().equals("true"))	{	
 			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	
 		}else	{	
@@ -142,6 +215,28 @@ public class AuthController {
 	//		return flag;
 	//
 	//	}
+	
+	@PutMapping("/updateUser")
+	public Boolean updateUser(@RequestBody UpdatePassword updatePassword) {
+		Boolean flag=false;
+
+//		Optional<User> optionalUser = userRepository.findById(userId);
+		User user =userRepository.findByEmail(updatePassword.getEmail());
+        OTP o=findOtpByMobileAndOtpCode(user.getMobile(),updatePassword.getOtp());
+
+        if(o==null) {
+              ResponseHandler.generateResponse(HttpStatus.NOT_ACCEPTABLE,false,"Enter a valid OTP !!",null);
+              flag=false;
+        }else {
+            user.setPassword(encoder.encode(updatePassword.getPassword()));
+            userRepository.save(user);
+            flag=true;
+        }
+
+         
+		return flag;
+		
+	}
 
 	@PutMapping("/deleteUser")
 	public boolean deleteUser(Long userId) {
@@ -176,8 +271,9 @@ public class AuthController {
 				signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()));
 
-		Set<String> strRoles = signUpRequest.getRole();
+	      List<String> strRoles =  Arrays.asList("Admin","User");			      
 		Set<Role> roles = new HashSet<>();
+	      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -206,7 +302,7 @@ public class AuthController {
 			});
 		}
 
-		user.setRoles(roles);
+		user.setRoles(rolesList);
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
