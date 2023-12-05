@@ -67,6 +67,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .authorizeHttpRequests(auth -> 
           auth.requestMatchers("/securityService/api/auth/**").permitAll()
               .requestMatchers("/securityService/api/test/**").permitAll()
+              .requestMatchers("/securityService/api/auth/signin").permitAll()
               .requestMatchers("/securityService/api/auth/createNewUser").permitAll()
               .requestMatchers("/securityService/api/**").permitAll()
               .requestMatchers("/securityService/api/auth/createNewUser","/securityService/api/v1/createRole").permitAll()

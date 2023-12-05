@@ -53,7 +53,8 @@ public class AuthServiceImpl implements AuthService {
 				  user.setMobile(signUpRequest.getMobile());
 				  user.setCompanyName(signUpRequest.getCompanyName()!=null?signUpRequest.getCompanyName():"NA");
 				  user.setPassword(encoder.encode(signUpRequest.getPassword()));
-			      List<String> strRoles =  Arrays.asList("Admin","User");			      
+				  
+			      List<String> strRoles =  Arrays.asList("ADMIN","USER");			      
 			      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 //			      List<Role> roles = new ArrayList<>();
 			      if(rolesList!=null && rolesList.size()>0) {

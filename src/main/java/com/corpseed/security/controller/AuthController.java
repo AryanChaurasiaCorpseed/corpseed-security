@@ -139,8 +139,10 @@ public class AuthController {
 //	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
 
 		User user=userRepository.findByEmail(loginRequest.getEmail());
+		System.out.println(user+"====================");
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
+		System.out.println(authentication+"=====AA===============");
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
