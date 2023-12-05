@@ -78,14 +78,14 @@ public class AuthServiceImpl implements AuthService {
 		  }
 
 	@Override
-	public Map<String, Object> createNewUserByEmail(String userName,String email, String role,String designation) {
+	public Map<String, Object> createNewUserByEmail(String userName,String email, List<String> role,String designation) {
 		// TODO Auto-generated method stub
 		Map<String,Object>res = new HashMap<String,Object>();
 		User user = new User();
 		user.setUsername(userName);
 		user.setEmail(email);
 		List<String> strRoles =  new ArrayList<>();		      
-		strRoles.add(role);
+		strRoles.addAll(role);
 	     List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 		user.setRoles(rolesList);
 		user.setDesignation(designation);
