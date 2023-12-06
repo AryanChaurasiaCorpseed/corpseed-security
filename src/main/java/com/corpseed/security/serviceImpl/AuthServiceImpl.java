@@ -84,6 +84,7 @@ public class AuthServiceImpl implements AuthService {
 		User user = new User();
 		user.setUsername(userName);
 		user.setEmail(email);
+		user.setFlag(true);
 		List<String> strRoles =  new ArrayList<>();		      
 		strRoles.addAll(role);
 	     List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
