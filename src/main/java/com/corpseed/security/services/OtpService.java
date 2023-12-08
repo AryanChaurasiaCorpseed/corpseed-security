@@ -11,7 +11,7 @@ import com.corpseed.security.payload.request.UpdateOtpResponse;
 public interface OtpService {
 
 
-    OtpResponse generateOtp(String mobile, String name,String password);
+    OtpResponse generateOtp(String mobile, String name,String password,String email);
 
     OTP findOtpByMobileAndOtpCode(String mobile, String otp);
 
