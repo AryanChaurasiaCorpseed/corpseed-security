@@ -38,7 +38,7 @@ public class OtpController {
 
     @PostMapping("/otp")
     public OtpResponse generateOtp(@RequestBody OtpRequest otpRequest){
-        return this.otpService.generateOtp(otpRequest.getMobile(),otpRequest.getName(),otpRequest.getPassword());
+        return this.otpService.generateOtp(otpRequest.getMobile(),otpRequest.getName(),otpRequest.getPassword(),otpRequest.getEmail());
     }
     @GetMapping("/isUserExistOrNot")
     public Map<String,Object> isUserExistOrNot(@RequestParam String email){

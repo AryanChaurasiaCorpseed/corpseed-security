@@ -37,6 +37,7 @@ import com.corpseed.security.models.OTP;
 import com.corpseed.security.models.Role;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.LoginRequest;
+import com.corpseed.security.payload.request.NewPasswordCreate;
 import com.corpseed.security.payload.request.NewSignupRequest;
 import com.corpseed.security.payload.request.SignupRequest;
 import com.corpseed.security.payload.request.UpdatePassword;
@@ -139,8 +140,10 @@ public class AuthController {
 //	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
 
 		User user=userRepository.findByEmail(loginRequest.getEmail());
+		System.out.println(user+"====================");
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
+		System.out.println(authentication+"=====AA===============");
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
@@ -235,6 +238,32 @@ public class AuthController {
 
          
 		return flag;
+		
+	}
+	
+	@PutMapping("/setNewPassword")
+	public ResponseEntity<Object> setNewPassword(@RequestBody NewPasswordCreate newPasswordCreate) {
+		Boolean flag=false;
+
+//		Optional<User> optionalUser = userRepository.findById(userId);
+		 Optional<User> user = userRepository.findById(newPasswordCreate.getId());
+        if((!user.isEmpty()) &&user.get()!=null) {
+        	User u =user.get();
+        	if(u.isFlag()==true) {
+        		u.setPassword(encoder.encode(newPasswordCreate.getPassword()));
+        		u.setFlag(false);
+                userRepository.save(u);
+    			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", u);	
+
+        	}else {
+    			return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, false,"User already set password . please forget it", null);	
+
+        	}
+        }else {
+			return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, false,"User is not prsent", null);	
+
+        }
+
 		
 	}
 

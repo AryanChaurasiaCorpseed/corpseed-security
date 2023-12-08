@@ -53,7 +53,8 @@ public class AuthServiceImpl implements AuthService {
 				  user.setMobile(signUpRequest.getMobile());
 				  user.setCompanyName(signUpRequest.getCompanyName()!=null?signUpRequest.getCompanyName():"NA");
 				  user.setPassword(encoder.encode(signUpRequest.getPassword()));
-			      List<String> strRoles =  Arrays.asList("Admin","User");			      
+				  
+			      List<String> strRoles =  Arrays.asList("ADMIN","USER");			      
 			      List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 //			      List<Role> roles = new ArrayList<>();
 			      if(rolesList!=null && rolesList.size()>0) {
@@ -77,14 +78,15 @@ public class AuthServiceImpl implements AuthService {
 		  }
 
 	@Override
-	public Map<String, Object> createNewUserByEmail(String userName,String email, String role,String designation) {
+	public Map<String, Object> createNewUserByEmail(String userName,String email, List<String> role,String designation) {
 		// TODO Auto-generated method stub
 		Map<String,Object>res = new HashMap<String,Object>();
 		User user = new User();
 		user.setUsername(userName);
 		user.setEmail(email);
+		user.setFlag(true);
 		List<String> strRoles =  new ArrayList<>();		      
-		strRoles.add(role);
+		strRoles.addAll(role);
 	     List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 		user.setRoles(rolesList);
 		user.setDesignation(designation);

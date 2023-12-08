@@ -20,6 +20,7 @@ public class User {
   private String username;
   private String email;
   private String password;
+  private boolean flag;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(  name = "user_roles", 
@@ -114,6 +115,15 @@ public String getDesignation() {
 public void setDesignation(String designation) {
 	this.designation = designation;
 }
+
+public boolean isFlag() {
+	return flag;
+}
+
+public void setFlag(boolean flag) {
+	this.flag = flag;
+}
+
 
 
 

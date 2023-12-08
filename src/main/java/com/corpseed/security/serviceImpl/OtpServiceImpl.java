@@ -33,7 +33,7 @@ public class OtpServiceImpl implements OtpService {
 	private UserRepository userRepository;
 
 	@Override
-	public OtpResponse generateOtp(String mobile, String name,String password) {
+	public OtpResponse generateOtp(String mobile, String name,String password,String email) {
 		String otpCode = CommonUtil.generateOTP(6);
 		System.out.println(otpCode);
 		//        OTP otp = new OTP();
@@ -66,7 +66,7 @@ public class OtpServiceImpl implements OtpService {
 		String subject="OTP Verification";
 		String text="CLICK ON THIS link and set password";
 		String[] ccPersons= {"aryan.chaurasia@corpseed.com"};
-		String[] toPersons= {"aryan.chaurasia@corpseed.com"};
+		String[] toPersons= {"aryan.chaurasia@corpseed.com",email};
 		mailSenderServiceImpl.sendEmail(toPersons, ccPersons,ccPersons, subject,text,context,"TeamAdd.html");
 		}catch(Exception e) {
 			e.printStackTrace();
