@@ -41,6 +41,7 @@ import com.corpseed.security.payload.request.NewPasswordCreate;
 import com.corpseed.security.payload.request.NewSignupRequest;
 import com.corpseed.security.payload.request.SignupRequest;
 import com.corpseed.security.payload.request.UpdatePassword;
+import com.corpseed.security.payload.request.UpdateUserDataDto;
 import com.corpseed.security.payload.response.JwtResponse;
 import com.corpseed.security.payload.response.MessageResponse;
 import com.corpseed.security.repository.RoleRepository;
@@ -335,5 +336,24 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+	
+	@PutMapping("/updateUserDataBySwagger")
+	public ResponseEntity<Object> updateUserData(@RequestBody UpdateUserDataDto updateUserDataDto) {
+		
+
+//		Optional<User> optionalUser = userRepository.findById(userId);
+		User u=authService.updateUserData(updateUserDataDto);
+		Boolean flag=u!=null?true:false;
+        if(flag) {
+        	
+			return ResponseHandler.generateResponse(HttpStatus.ACCEPTED, true,"user has been updated", flag);	
+
+        }else {
+			return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, false,"User is not prsent", null);	
+
+        }
+
+		
 	}
 }

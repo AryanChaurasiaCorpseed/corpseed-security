@@ -20,6 +20,7 @@ import com.corpseed.security.jwt.JwtUtils;
 import com.corpseed.security.models.Role;
 import com.corpseed.security.models.User;
 import com.corpseed.security.payload.request.SignupRequest;
+import com.corpseed.security.payload.request.UpdateUserDataDto;
 import com.corpseed.security.repository.RoleRepository;
 import com.corpseed.security.repository.UserRepository;
 import com.corpseed.security.services.AuthService;
@@ -104,4 +105,24 @@ public class AuthServiceImpl implements AuthService {
 
 		return res;
 	}
+	
+	@Override
+	public User updateUserData(UpdateUserDataDto updateUserDataDto) {
+		User user = userRepository.findById(updateUserDataDto.getId()).get();
+		
+		user.setUsername(updateUserDataDto.getName());
+	     List<Role>rolesList=roleRepository.findAllByNameIn(updateUserDataDto.getRoles());
+	     if(rolesList!=null) {
+		     user.setRoles(rolesList);
+	     }
+	     if(updateUserDataDto.getEmail()!=null) {
+		     user.setEmail(updateUserDataDto.getEmail());
+	     }
+	     user.setDesignation(updateUserDataDto.getDesignation());
+	     userRepository.save(user);
+
+	     return user;
+	}
+
+	
 }
