@@ -117,11 +117,6 @@ public class OtpServiceImpl implements OtpService {
     								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
     								.expiredAt(CommonUtil.getExpiryDateTime()).build());
         }
-//		OTP otp = this.otpRepository.findByMobileContaining
-//				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
-//						: mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
-//								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
-//								.expiredAt(CommonUtil.getExpiryDateTime()).build());
 		System.out.println("otp====="+otp);
 
 		if(otp.getId()!=null&&otp.getId()>0){
@@ -134,6 +129,21 @@ public class OtpServiceImpl implements OtpService {
 		};
 
 		OTP save = this.otpRepository.save(otp);
+		//===============================================Mail - Implementation ===============================
+		try {
+
+		Context context = new Context();
+		context.setVariable("otp", otpCode);
+		context.setVariable("currentYear", LocalDateTime.now().getYear());
+		String subject="OTP Verification";
+		String text="CLICK ON THIS link and set password";
+		String[] ccPersons= {"aryan.chaurasia@corpseed.com"};
+		String[] toPersons= {"aryan.chaurasia@corpseed.com",email};
+		mailSenderServiceImpl.sendEmail(toPersons, ccPersons,ccPersons, subject,text,context,"TeamAdd.html");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		//===============================================
 		if(save!=null)
 			return UpdateOtpResponse.builder().mobile(mobile).otp(otpCode).email(email).build();
 		else return null;
