@@ -167,6 +167,10 @@ public class AuthController {
     public OTP findOtpByMobileAndOtpCode(String mobile, String otp) {
         return this.otpRepository.findByMobileContainingAndOtpCode(mobile,otp);
     }
+    
+    public OTP findOtpByEmailAndOtpCode(String email, String otp) {
+        return this.otpRepository.findByEmailContainingAndOtpCode(email,otp);
+    }
 
 	@PostMapping("/createNewUser")
 	public ResponseEntity<Object> registerUserV3(@RequestBody SignupRequest signUpRequest){
@@ -223,21 +227,21 @@ public class AuthController {
 	@PutMapping("/updateUser")
 	public Boolean updateUser(@RequestBody UpdatePassword updatePassword) {
 		Boolean flag=false;
-
-//		Optional<User> optionalUser = userRepository.findById(userId);
 		User user =userRepository.findByEmail(updatePassword.getEmail());
-        OTP o=findOtpByMobileAndOtpCode(user.getMobile(),updatePassword.getOtp());
+		 OTP o=null;
+		 System.out.println("user .. "+user);
+		if(user.getMobile()!=null) {
+	        o=findOtpByMobileAndOtpCode(user.getMobile(),updatePassword.getOtp());
+		}else {
+	        o=findOtpByEmailAndOtpCode(user.getEmail(),updatePassword.getOtp());
+		}
+		 System.out.println("OTP . .. . "+o);
 
         if(o==null) {
-              ResponseHandler.generateResponse(HttpStatus.NOT_ACCEPTABLE,false,"Enter a valid OTP !!",null);
               flag=false;
         }else {
-            user.setPassword(encoder.encode(updatePassword.getPassword()));
-            userRepository.save(user);
-            flag=true;
-        }
-
-         
+        	 flag = authService.updateUser( updatePassword,user,o);
+        }    
 		return flag;
 		
 	}

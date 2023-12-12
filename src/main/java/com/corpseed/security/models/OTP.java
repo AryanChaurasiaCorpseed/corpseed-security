@@ -30,6 +30,8 @@ public class OTP {
     private Long id;
 
     private String name;
+    
+    private String email;
 
     @Size(min = 10,max = 15,message = "Mobile length should be 10-15 digits.")
     private String mobile;
@@ -121,6 +123,14 @@ public class OTP {
 
 	public void setExpiredAt(Date expiredAt) {
 		this.expiredAt = expiredAt;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
     

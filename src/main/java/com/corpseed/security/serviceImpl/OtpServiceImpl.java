@@ -50,6 +50,7 @@ public class OtpServiceImpl implements OtpService {
 			//            System.out.println("otp ..........."+otpCode);
 			otp.setOtpCode(otpCode);
 			otp.setName(name);
+			otp.setEmail(email);
 			otp.setPassword(password);
 			otp.setExpiredAt(CommonUtil.getExpiryDateTime());
 		};
@@ -103,18 +104,31 @@ public class OtpServiceImpl implements OtpService {
 	@Override
 	public UpdateOtpResponse forgetOtp(String mobile, String name, String password, String email) {
 		String otpCode = CommonUtil.generateOTP(6);
-
-		OTP otp = this.otpRepository.findByMobileContaining
-				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
-						: mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
-								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
-								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+		OTP otp=null;
+        if(mobile!=null) {
+    		otp = this.otpRepository.findByMobileContaining
+    				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
+    						: mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
+    								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+    								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+        }else {
+    		otp = this.otpRepository.findByEmailContaining
+    				(email).orElse(new OTP().builder().email(email)
+    								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+    								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+        }
+//		OTP otp = this.otpRepository.findByMobileContaining
+//				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
+//						: mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
+//								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+//								.expiredAt(CommonUtil.getExpiryDateTime()).build());
 		System.out.println("otp====="+otp);
 
 		if(otp.getId()!=null&&otp.getId()>0){
 			otp.setCount(otp.getCount()+1);
 			otp.setOtpCode(otpCode);
 			otp.setName(name);
+			otp.setEmail(email);
 			otp.setPassword(password);
 			otp.setExpiredAt(CommonUtil.getExpiryDateTime());
 		};
