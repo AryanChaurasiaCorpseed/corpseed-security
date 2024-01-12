@@ -62,7 +62,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+//        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
           auth.requestMatchers("/securityService/api/auth/**").permitAll()
@@ -73,7 +73,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
               .requestMatchers("/securityService/api/auth/createNewUser","/securityService/api/v1/createRole").permitAll()
               .requestMatchers("/securityService/api/auth/signin").permitAll()
               .requestMatchers("/securityService/api/auth/createNewUser").permitAll()
-                  
+              .requestMatchers("/securityService/api/auth/createNewUserByEmail").permitAll()
+        
               .requestMatchers("/securityService/api/auth/forgetOtp").permitAll()
               .requestMatchers("/securityService/api/auth/isUserExistOrNot").permitAll()
               .requestMatchers("/swagger-ui/**",
