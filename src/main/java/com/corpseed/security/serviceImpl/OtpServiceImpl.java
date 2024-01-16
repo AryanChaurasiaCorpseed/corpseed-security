@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,13 +37,31 @@ public class OtpServiceImpl implements OtpService {
 	public OtpResponse generateOtp(String mobile, String name,String password,String email) {
 		String otpCode = CommonUtil.generateOTP(6);
 		System.out.println(otpCode);
-		//        OTP otp = new OTP();
-		//
-		OTP otp = this.otpRepository.findByMobileContaining
-				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
-						: mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
-								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
-								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+
+//		OTP otp = this.otpRepository.findByMobileContaining
+//				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
+//						: mobile.trim())
+//				.orElse(new OTP().builder().mobile(mobile.trim())
+//								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+//								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+		OTP otp=null;
+		
+		otp = otpRepository.findByMobile
+				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10): mobile.trim());
+		 if(otp==null) {
+			 otp=new OTP();
+			 otp.setMobile(mobile.trim());
+			 otp.setOtpCode(otpCode);
+			 otp.setCount(1L);
+			 otp.setUsed(false);
+			 otp.setCreated_at(CommonUtil.getDate());
+			 otp.setName(name);
+			 otp.setPassword(password);
+			 otp.setExpiredAt(CommonUtil.getExpiryDateTime());
+			 otpRepository.save(otp);
+			 
+		 }
+		 
 		System.out.println("otp====="+otp);
 
 		if(otp.getId()!=null&&otp.getId()>0){
@@ -106,16 +125,47 @@ public class OtpServiceImpl implements OtpService {
 		String otpCode = CommonUtil.generateOTP(6);
 		OTP otp=null;
         if(mobile!=null) {
-    		otp = this.otpRepository.findByMobileContaining
-    				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
-    						: mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
-    								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
-    								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+//    		otp = this.otpRepository.findByMobileContaining
+//    				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10)
+//    						: mobile.trim()).orElse(new OTP().builder().mobile(mobile.trim())
+//    								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+//    								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+    		
+    		otp = otpRepository.findByMobile
+    				(mobile.length() > 10 ? mobile.trim().substring(mobile.length() - 10): mobile.trim());
+    		 if(otp==null) {
+    			 otp=new OTP();
+    			 otp.setMobile(mobile.trim());
+    			 otp.setOtpCode(otpCode);
+    			 otp.setCount(1L);
+    			 otp.setUsed(false);
+    			 otp.setCreated_at(CommonUtil.getDate());
+    			 otp.setName(name);
+    			 otp.setPassword(password);
+    			 otp.setExpiredAt(CommonUtil.getExpiryDateTime());
+    			 otpRepository.save(otp);
+    			 
+    		 }
         }else {
-    		otp = this.otpRepository.findByEmailContaining
-    				(email).orElse(new OTP().builder().email(email)
-    								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
-    								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+//    		otp = this.otpRepository.findByEmailContaining
+//    				(email).orElse(new OTP().builder().email(email)
+//    								.otpCode(otpCode).count(1L).isUsed(false).created_at(CommonUtil.getDate()).name(name).password(password)
+//    								.expiredAt(CommonUtil.getExpiryDateTime()).build());
+    		
+    		otp = otpRepository.findByEmail(email);
+    		 if(otp==null) {
+    			 otp=new OTP();
+    			 otp.setMobile(mobile.trim());
+    			 otp.setOtpCode(otpCode);
+    			 otp.setCount(1L);
+    			 otp.setUsed(false);
+    			 otp.setCreated_at(CommonUtil.getDate());
+    			 otp.setName(name);
+    			 otp.setPassword(password);
+    			 otp.setExpiredAt(CommonUtil.getExpiryDateTime());
+    			 otpRepository.save(otp);
+    			 
+    		 }
         }
 		System.out.println("otp====="+otp);
 
@@ -144,8 +194,15 @@ public class OtpServiceImpl implements OtpService {
 			e.printStackTrace();
 		}
 		//===============================================
-		if(save!=null)
-			return UpdateOtpResponse.builder().mobile(mobile).otp(otpCode).email(email).build();
-		else return null;
+		if(save!=null) {
+			UpdateOtpResponse updateOtpResponse = new UpdateOtpResponse();
+			updateOtpResponse.setEmail(email);
+			updateOtpResponse.setMobile(mobile);
+			updateOtpResponse.setOtp(otpCode);
+			return updateOtpResponse;
+		}
+		else {
+			return null;
+		}
 	}
 }

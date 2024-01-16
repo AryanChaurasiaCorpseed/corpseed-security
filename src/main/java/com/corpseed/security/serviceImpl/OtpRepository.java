@@ -13,8 +13,12 @@ public interface OtpRepository extends JpaRepository<OTP,Long> {
     Optional<OTP> findByMobileContaining(String mobile);
     
     Optional<OTP> findByEmailContaining(String email);
-
-
+    
+	@Query(value = "SELECT * FROM otp o WHERE o.mobile =:mobile", nativeQuery = true)
+    OTP findByMobile(String mobile); 
+	@Query(value = "SELECT * FROM otp o WHERE o.email =:email", nativeQuery = true)
+    OTP findByEmail(String email); 
+	
     OTP findByMobileContainingAndOtpCode(String mobile, String otp);
 	@Query(value = "SELECT * FROM otp o WHERE o.email =:email and o.otp_code=:otp", nativeQuery = true)
     OTP findByEmailContainingAndOtpCode(String email, String otp);

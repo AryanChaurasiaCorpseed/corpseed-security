@@ -63,12 +63,13 @@ public class OtpController {
     @PostMapping("/forgetOtp")
     public UpdateOtpResponse forgetOtp(@RequestParam String email){	 	
     	User user = userRepository.findByEmail(email);
-    	System.out.println("mobile ... "+user.getMobile());
-    	System.out.println("password  ... "+user.getPassword());
-    	System.out.println("username   ... "+user.getUsername());
-    	System.out.println("email  ... "+user.getEmail());
 
-	    return this.otpService.forgetOtp(user.getMobile(),user.getUsername(),user.getPassword(),email);
+       if(user==null) {
+      	    return this.otpService.forgetOtp(null,null,null,email);
+       }else {
+   	    return this.otpService.forgetOtp(user.getMobile(),user.getUsername(),user.getPassword(),email);
+
+       }
     }
 }
 
