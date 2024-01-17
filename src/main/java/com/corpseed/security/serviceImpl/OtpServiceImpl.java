@@ -92,10 +92,17 @@ public class OtpServiceImpl implements OtpService {
 			e.printStackTrace();
 		}
 		//===============================================
-		if(save!=null)
+		if(save!=null) {
 			//        	return null;
-			return OtpResponse.builder().mobile(mobile).otp(otpCode).build();
-		else return null;
+			OtpResponse otpResponse = new OtpResponse();
+			otpResponse.setMobile(mobile);
+			otpResponse.setOtp(otpCode);
+			return otpResponse;
+//			return OtpResponse.builder().mobile(mobile).otp(otpCode).build();
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override
