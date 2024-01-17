@@ -21,6 +21,7 @@ public class User {
   private String email;
   private String password;
   private boolean flag;
+  private String department;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(  name = "user_roles", 
@@ -56,6 +57,14 @@ public String getUsername() {
 
 public void setUsername(String username) {
 	this.username = username;
+}
+
+public String getDepartment() {
+	return department;
+}
+
+public void setDepartment(String department) {
+	this.department = department;
 }
 
 public String getEmail() {

@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public Map<String, Object> createNewUserByEmail(String userName,String email, List<String> role,String designation) {
+	public Map<String, Object> createNewUserByEmail(String userName,String email, List<String> role,String designation,String department) {
 		// TODO Auto-generated method stub
 		Map<String,Object>res = new HashMap<String,Object>();
 		User user = new User();
@@ -98,6 +98,7 @@ public class AuthServiceImpl implements AuthService {
 		List<Role>rolesList=roleRepository.findAllByNameIn(strRoles);
 		user.setRoles(rolesList);
 		user.setDesignation(designation);
+		user.setDepartment(department);
 		User u=userRepository.save(user);
 		if(u!=null) {
 			res.put("flag", true);
@@ -109,6 +110,7 @@ public class AuthServiceImpl implements AuthService {
 		res.put("role", user.getRoles());
 		res.put("designation", user.getDesignation());
 		res.put("email", user.getEmail());
+		res.put("department", user.getDepartment());
 
 		return res;
 	}

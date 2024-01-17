@@ -192,7 +192,7 @@ public class AuthController {
 	@PostMapping("/createNewUserByEmail")
 	public ResponseEntity<Object> createNewUserByEmail(@RequestBody NewSignupRequest newSignupRequest){
 
-		Map<String,Object> response = authService.createNewUserByEmail(newSignupRequest.getUserName(),newSignupRequest.getEmail(),newSignupRequest.getRole(),newSignupRequest.getDesignation());
+		Map<String,Object> response = authService.createNewUserByEmail(newSignupRequest.getUserName(),newSignupRequest.getEmail(),newSignupRequest.getRole(),newSignupRequest.getDesignation(),newSignupRequest.getDepartment());
 		
 		if (response.get("flag").toString().equals("true"))	{	
 			return ResponseHandler.generateResponse(HttpStatus.OK, true,"sucess", response);	

@@ -13,6 +13,7 @@ public class NewSignupRequest {
 	List<String> role;
 	String designation;
 	String userName;
+	String department;
 	public String getEmail() {
 		return email;
 	}
@@ -21,6 +22,12 @@ public class NewSignupRequest {
 	}
 	
 	
+	public String getDepartment() {
+		return department;
+	}
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 	public List<String> getRole() {
 		return role;
 	}

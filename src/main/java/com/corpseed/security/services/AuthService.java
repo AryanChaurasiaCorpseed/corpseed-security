@@ -16,7 +16,7 @@ public interface AuthService {
 
 	 public Map<String,Object> registerUserV2(SignupRequest signUpRequest);
 
-	public Map<String, Object> createNewUserByEmail(String userName,String email, List<String> role,String designation);
+	public Map<String, Object> createNewUserByEmail(String userName,String email, List<String> role,String designation,String department);
 
 	public User updateUserData(UpdateUserDataDto updateUserDataDto);
 
