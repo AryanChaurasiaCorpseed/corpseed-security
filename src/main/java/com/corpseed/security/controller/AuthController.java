@@ -23,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -140,7 +141,7 @@ public class AuthController {
 	public ResponseEntity<?> authenticateUsers( @RequestBody LoginRequest loginRequest) {
 //	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
 
-		User user=userRepository.findByEmail(loginRequest.getEmail());
+		User user=userRepository.findByEmailAndIsDeleted(loginRequest.getEmail(),false);
 		System.out.println(user+"====================");
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
@@ -345,7 +346,6 @@ public class AuthController {
 	@PutMapping("/updateUserDataBySwagger")
 	public ResponseEntity<Object> updateUserData(@RequestBody UpdateUserDataDto updateUserDataDto) {
 		
-
 //		Optional<User> optionalUser = userRepository.findById(userId);
 		User u=authService.updateUserData(updateUserDataDto);
 		Boolean flag=u!=null?true:false;
@@ -357,7 +357,25 @@ public class AuthController {
 			return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, false,"User is not prsent", null);	
 
         }
+	}
+	
+	@GetMapping("/getAllUserBySwagger")
+	public List<User> getAllUserBySwagger() {
+		List<User> userList = authService.getAllUserBySwagger();
+		return userList;
+	}
 
-		
+	@PutMapping("/activateUser")
+	public boolean activateUser(Long userId) {
+		boolean flag=false;
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if(optionalUser!=null && optionalUser.get()!=null) {
+
+			User user = optionalUser.get();
+			user.setIsDeleted(false);
+			userRepository.save(user);
+			flag=true;
+		}
+		return flag;
 	}
 }

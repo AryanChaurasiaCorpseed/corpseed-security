@@ -154,6 +154,13 @@ public class AuthServiceImpl implements AuthService {
 		flag=true;   
 		return flag;
 	}
+	
+	@Override
+	public List<User> getAllUserBySwagger() {
+		List<User> userList = userRepository.findAll();
+		return userList;
+	}
+
 
 
 

@@ -30,7 +30,7 @@ public class User {
   private List<Role> roles = new ArrayList<>();  
   String companyName; 
   String mobile;
-  private Boolean isDeleted;
+  private boolean isDeleted;
   private String designation;
   
   

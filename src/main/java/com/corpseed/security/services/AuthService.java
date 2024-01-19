@@ -22,4 +22,6 @@ public interface AuthService {
 
 
 	public boolean updateUser(UpdatePassword updatePassword, User user, OTP o);
+
+	List<User> getAllUserBySwagger();
 }
