@@ -273,7 +273,7 @@ public class AuthController {
 		
 	}
 
-	@PutMapping("/deleteUser")
+	@DeleteMapping("/deleteUser")
 	public boolean deleteUser(Long userId) {
 		boolean flag=false;
 		Optional<User> optionalUser = userRepository.findById(userId);
