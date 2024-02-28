@@ -294,7 +294,6 @@ public class AuthController {
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
-
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
@@ -321,13 +320,11 @@ public class AuthController {
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(adminRole);
-
 					break;
 				case "mod":
 					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(modRole);
-
 					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -336,7 +333,6 @@ public class AuthController {
 				}
 			});
 		}
-
 		user.setRoles(rolesList);
 		userRepository.save(user);
 
@@ -344,18 +340,13 @@ public class AuthController {
 	}
 	
 	@PutMapping("/updateUserDataBySwagger")
-	public ResponseEntity<Object> updateUserData(@RequestBody UpdateUserDataDto updateUserDataDto) {
-		
-//		Optional<User> optionalUser = userRepository.findById(userId);
+	public ResponseEntity<Object> updateUserDataBySwagger(@RequestBody UpdateUserDataDto updateUserDataDto) {
 		User u=authService.updateUserData(updateUserDataDto);
 		Boolean flag=u!=null?true:false;
-        if(flag) {
-        	
+        if(flag) {    	
 			return ResponseHandler.generateResponse(HttpStatus.ACCEPTED, true,"user has been updated", flag);	
-
         }else {
 			return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, false,"User is not prsent", null);	
-
         }
 	}
 	
@@ -370,7 +361,6 @@ public class AuthController {
 		boolean flag=false;
 		Optional<User> optionalUser = userRepository.findById(userId);
 		if(optionalUser!=null && optionalUser.get()!=null) {
-
 			User user = optionalUser.get();
 			user.setIsDeleted(false);
 			userRepository.save(user);
@@ -378,4 +368,18 @@ public class AuthController {
 		}
 		return flag;
 	}
+	
+	
+	@PutMapping("/updateUserData")
+	public ResponseEntity<Object> updateUserData(@RequestBody UpdateUserDataDto updateUserDataDto) {
+		User u=authService.updateUserData(updateUserDataDto);
+		Boolean flag=u!=null?true:false;
+        if(flag) {   	
+			return ResponseHandler.generateResponse(HttpStatus.ACCEPTED, true,"user has been updated", flag);	
+        }else {
+			return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, false,"User is not prsent", null);	
+        }
+	}
+	
+	
 }
