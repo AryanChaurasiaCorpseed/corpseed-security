@@ -162,7 +162,7 @@ public class OtpServiceImpl implements OtpService {
     		otp = otpRepository.findByEmail(email);
     		 if(otp==null) {
     			 otp=new OTP();
-    			 otp.setMobile(mobile.trim());
+    			 otp.setMobile(mobile!=null?mobile.trim():null);
     			 otp.setOtpCode(otpCode);
     			 otp.setCount(1L);
     			 otp.setUsed(false);
