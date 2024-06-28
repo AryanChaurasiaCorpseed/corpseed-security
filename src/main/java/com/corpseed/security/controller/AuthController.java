@@ -142,14 +142,11 @@ public class AuthController {
 //	public ResponseEntity<?> authenticateUsers( @RequestParam String email,@RequestParam String password) {
 
 		User user=userRepository.findByEmailAndIsDeleted(loginRequest.getEmail(),false);
-		System.out.println(user+"====================");
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
-		System.out.println(authentication+"=====AA===============");
+				new UsernamePasswordAuthenticationToken(user.getEmail(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
-		System.out.println(jwt);
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
